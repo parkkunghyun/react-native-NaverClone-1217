@@ -10,5 +10,5 @@ export default RouteNames;
 export type RootStackParamList = {
     // 어떠한 스택들이 있고 어떤 파라미터를 줄 수 있는지
     [RouteNames.HOME_TAB]: undefined;
-    [RouteNames.BROWSER]: undefined
+    [RouteNames.BROWSER]: { initialUrl: string };
 }

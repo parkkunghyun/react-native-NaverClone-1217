@@ -35,6 +35,7 @@ const HomeTab = () => {
       },
       tabBarActiveTintColor: 'white',
       tabBarInactiveTintColor: 'white',
+      headerShown: false,
     }}>
       <Tab.Screen options={{ tabBarLabel: '홈', tabBarIcon: HomeIcon}}
         name={RouteNames.HOME} component={HomeScreen} />
@@ -48,7 +49,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name={RouteNames.HOME_TAB} component={HomeTab} options={{headerShown: false}}/>
-          <Stack.Screen name={RouteNames.BROWSER} component={BrowserScreen} />
+          <Stack.Screen options={{headerShown: false}} name={RouteNames.BROWSER} component={BrowserScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

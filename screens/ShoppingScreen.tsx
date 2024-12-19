@@ -13,7 +13,7 @@ const ShoppingScreen = ({navigation}: Props) => {
             <Text>Shopping</Text>
             <Text>Shopping</Text>
             <TouchableOpacity onPress={() => {
-                navigation.navigate(RouteNames.BROWSER);
+                navigation.navigate(RouteNames.BROWSER, {initialUrl: 'https://m.naver.com'});
             }}>
                 <Text>Go to Browser</Text>
             </TouchableOpacity>
