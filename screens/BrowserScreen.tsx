@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Share, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useMemo, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
@@ -131,6 +131,9 @@ const BrowserScreen = ({ route, navigation }: Props) => {
                 }} />
                 <NavButton iconName="refresh" onPress={() => {
                     webViewRef.current?.reload();
+                }} />
+                <NavButton iconName="share-outline" onPress={() => {
+                    Share.share({ message: url });
                 }}  />
             </View>
         </SafeAreaView>
