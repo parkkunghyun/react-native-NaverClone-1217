@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import RouteNames, { RootStackParamList } from '../routes';
+
+import { WebViewContext } from '../components/WebViewProvider';
 
 const styles = StyleSheet.create({
     safeArea: { flex: 1 },
@@ -12,10 +14,19 @@ const styles = StyleSheet.create({
 type Props = NativeStackScreenProps<RootStackParamList>;
 
 
-const HomeScreen = ({navigation}: Props) => {
+const HomeScreen = ({ navigation }: Props) => {
+    const context = useContext(WebViewContext);
+
     return (
         <SafeAreaView style={styles.safeArea}>
-            <WebView source={{ uri: 'https://m.naver.com/' }}
+            <WebView
+                ref={(ref) => {
+                    if (ref != null) {
+                        context?.addWebView(ref);
+                    }
+
+                }}
+                source={{ uri: 'https://m.naver.com/' }}
             onShouldStartLoadWithRequest={request => {
                 console.log(request);
                 if (request.url.startsWith('https://m.naver.com') || request.mainDocumentURL?.startsWith('https://m.naver.com')) {

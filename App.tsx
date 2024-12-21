@@ -8,6 +8,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BrowserScreen from './screens/BrowserScreen';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { LoginButton } from './components/LoginButton';
+import LoginScreen from './screens/LoginScreen';
+import { WebViewProvider } from './components/WebViewProvider';
 
 
 const Tab = createBottomTabNavigator();
@@ -46,11 +49,25 @@ const HomeTab = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name={RouteNames.HOME_TAB} component={HomeTab} options={{headerShown: false}}/>
-          <Stack.Screen options={{headerShown: false}} name={RouteNames.BROWSER} component={BrowserScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <WebViewProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name={RouteNames.HOME_TAB} component={HomeTab}
+            options={{
+              title: '',
+              headerStyle: {
+                backgroundColor: 'black',
+              },
+              headerRight: LoginButton,
+            }} />
+          <Stack.Screen options={{ headerShown: false }} name={RouteNames.BROWSER} component={BrowserScreen} />
+          <Stack.Screen options={{
+            title: '',
+            headerStyle: { backgroundColor: 'black' },
+            headerTintColor: 'white',
+          }} name={RouteNames.LOGIN} component={LoginScreen} />
+        </Stack.Navigator>
+        </NavigationContainer>
+      </WebViewProvider>
   );
 }

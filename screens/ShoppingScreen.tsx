@@ -1,9 +1,10 @@
 import { RefreshControl, ScrollView, StyleSheet } from 'react-native';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import RouteNames, { RootStackParamList } from '../routes';
+import { WebViewContext } from '../components/WebViewProvider';
 
 
 const styles = StyleSheet.create({
@@ -25,6 +26,8 @@ const ShoppingScreen = ({navigation}: Props) => {
       webViewRef.current?.reload();
     }, []);
 
+  const context = useContext(WebViewContext);
+
     return (
       <SafeAreaView style={styles.safeArea}>
         <ScrollView
@@ -33,7 +36,12 @@ const ShoppingScreen = ({navigation}: Props) => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <WebView
-            ref={webViewRef}
+            ref={(ref) => {
+              webViewRef.current = ref;
+              if (ref != null) {
+                  context?.addWebView(ref);
+              }
+          }}
             source={{uri: SHOPPING_HOME_URL}}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}

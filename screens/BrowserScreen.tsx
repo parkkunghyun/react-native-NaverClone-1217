@@ -1,5 +1,5 @@
 import { Share, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useContext, useMemo, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -7,6 +7,7 @@ import { RootStackParamList } from '../routes';
 import { Animated, Text, View } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { WebViewContext } from '../components/WebViewProvider';
 
 
 const styles = StyleSheet.create({
@@ -79,7 +80,9 @@ const BrowserScreen = ({ route, navigation }: Props) => {
 
     const progressAnim = useRef(new Animated.Value(0)).current;
 
-    const webViewRef = useRef<WebView>(null);
+    const webViewRef = useRef<WebView | null>(null);
+
+    const context = useContext(WebViewContext);
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -94,7 +97,12 @@ const BrowserScreen = ({ route, navigation }: Props) => {
                 })}]}  />
             </View>
             <WebView
-                ref={webViewRef}
+                ref={(ref) => {
+                    webViewRef.current = ref;
+                    if (ref != null) {
+                        context?.addWebView(ref);
+                    }
+                }}
                 source={{ uri: initialUrl }}
                 onLoadProgress={(event) => {
                     progressAnim.setValue(event.nativeEvent.progress);
