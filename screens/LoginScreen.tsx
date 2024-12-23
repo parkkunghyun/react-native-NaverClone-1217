@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
 import { RootStackParamList } from '../routes';

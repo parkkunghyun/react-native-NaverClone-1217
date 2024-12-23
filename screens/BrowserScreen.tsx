@@ -8,6 +8,7 @@ import { Animated, Text, View } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { WebViewContext } from '../components/WebViewProvider';
+import { useBackHandler } from '@react-native-community/hooks';
 
 
 const styles = StyleSheet.create({
@@ -49,6 +50,17 @@ const styles = StyleSheet.create({
     },
 });
 
+const DISABLE_PINCH_ZOOM = `(function() {
+    const meta = document.createElement('meta');
+    meta.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+    meta.setAttribute('name', 'viewport');
+    document.getElementsByTagName('head')[0].appendChild(meta);
+
+    // 이게 텍스트 롱 프레스 비활성화임
+    document.body.style['user-select'] = 'none';
+    document.body.style['-webkit-user-select'] = 'none';
+  })();`;
+
 const NavButton = ({iconName, disabled, onPress }: {
     iconName: string,
     disabled?: boolean,
@@ -84,6 +96,16 @@ const BrowserScreen = ({ route, navigation }: Props) => {
 
     const context = useContext(WebViewContext);
 
+    useBackHandler(() => {
+        // false가 기본 스크린 이동
+        // true를 좀 설정해야 우리가 원하는 웹뷰 활성화
+        if (canGoBack) {
+            webViewRef.current?.goBack();
+            return true;
+        }
+        return false;
+    });
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.urlContainer}>
@@ -110,6 +132,13 @@ const BrowserScreen = ({ route, navigation }: Props) => {
                 onLoadEnd={() => {
                     progressAnim.setValue(0);
                 }}
+
+                // 핀치 줌 아웃 비활성화 코드
+                injectedJavaScript={DISABLE_PINCH_ZOOM}
+                onMessage={() => { }}
+                // ios 링크 미리보기 뷰 비활성화 코드
+                allowsLinkPreview={false}
+
                 onNavigationStateChange={(event) =>
                 {
                     setCanGoForward(event.canGoForward);
